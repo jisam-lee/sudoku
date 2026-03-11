@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#ffffff">
+<title>SUDOKU</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.svg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ══ SCREEN 1: 메인 메뉴 ══ -->
+<div class="screen active" id="screenMenu">
+  <div class="title-wrap" onclick="document.getElementById('imgInp').click()">
+    <svg id="titleSvg" viewBox="0 0 460 160" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="gbg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#0f172a"/><stop offset="100%" stop-color="#1e3a5f"/>
+        </linearGradient>
+        <linearGradient id="gac" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#8b5cf6"/>
+        </linearGradient>
+        <linearGradient id="ggd" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#d97706"/>
+        </linearGradient>
+      </defs>
+      <rect width="460" height="160" fill="url(#gbg)" rx="12"/>
+      <g opacity=".07" stroke="#fff" stroke-width="1">
+        <line x1="51" y1="0" x2="51" y2="160"/><line x1="102" y1="0" x2="102" y2="160"/>
+        <line x1="153" y1="0" x2="153" y2="160"/><line x1="204" y1="0" x2="204" y2="160"/>
+        <line x1="255" y1="0" x2="255" y2="160"/><line x1="306" y1="0" x2="306" y2="160"/>
+        <line x1="357" y1="0" x2="357" y2="160"/><line x1="408" y1="0" x2="408" y2="160"/>
+        <line x1="0" y1="18" x2="460" y2="18"/><line x1="0" y1="36" x2="460" y2="36"/>
+        <line x1="0" y1="54" x2="460" y2="54"/><line x1="0" y1="72" x2="460" y2="72"/>
+        <line x1="0" y1="90" x2="460" y2="90"/><line x1="0" y1="108" x2="460" y2="108"/>
+        <line x1="0" y1="126" x2="460" y2="126"/><line x1="0" y1="144" x2="460" y2="144"/>
+      </g>
+      <g opacity=".25" stroke="#fff" stroke-width="2.5">
+        <line x1="153" y1="0" x2="153" y2="160"/><line x1="306" y1="0" x2="306" y2="160"/>
+        <line x1="0" y1="54" x2="460" y2="54"/><line x1="0" y1="108" x2="460" y2="108"/>
+      </g>
+      <text x="20" y="42" font-family="Arial Black,sans-serif" font-size="22" fill="url(#gac)" opacity=".7">5</text>
+      <text x="65" y="42" font-family="Arial Black,sans-serif" font-size="22" fill="#fff" opacity=".2">3</text>
+      <text x="390" y="96" font-family="Arial Black,sans-serif" font-size="22" fill="url(#ggd)" opacity=".6">9</text>
+      <text x="420" y="150" font-family="Arial Black,sans-serif" font-size="22" fill="url(#gac)" opacity=".45">2</text>
+      <text x="20" y="150" font-family="Arial Black,sans-serif" font-size="22" fill="#fff" opacity=".15">7</text>
+      <text x="230" y="92" font-family="Arial Black,sans-serif" font-size="62" fill="url(#gac)"
+            text-anchor="middle" letter-spacing="8" font-weight="900">SUDOKU</text>
+      <text x="230" y="118" font-family="Arial,sans-serif" font-size="11" fill="url(#ggd)"
+            text-anchor="middle" letter-spacing="5" font-weight="700">BRAIN TRAINING</text>
+      <text x="90" y="132" font-size="11" fill="#fbbf24" opacity=".65">&#9733;</text>
+      <text x="358" y="132" font-size="11" fill="#fbbf24" opacity=".65">&#9733;</text>
+      <text x="230" y="152" font-family="Arial,sans-serif" font-size="7" fill="#fff"
+            text-anchor="middle" opacity=".25" letter-spacing="2">TAP TO CHANGE IMAGE</text>
+    </svg>
+    <img id="titleImgCustom" src="" alt="">
+  </div>
+  <input type="file" id="imgInp" accept="image/*" style="display:none" onchange="onImgSel(event)">
+
+  <div class="menu-logo">SU<em>DO</em>KU</div>
+  <div class="menu-tagline" id="mTagline">Brain Training</div>
+  <div class="stage-dots" id="mDots"></div>
+
+  <div class="menu-buttons">
+    <button class="menu-btn primary" onclick="goToDiff()">
+      <span class="mbtn-icon">&#9654;</span>
+      <span>
+        <b class="mbtn-title" id="btnNew">New Game</b>
+        <span class="mbtn-sub" id="btnNewS">Choose difficulty and start</span>
+      </span>
+    </button>
+    <button class="menu-btn green" onclick="menuLoad()">
+      <span class="mbtn-icon">&#128193;</span>
+      <span>
+        <b class="mbtn-title" id="btnCont">Continue</b>
+        <span class="mbtn-sub" id="btnContS">Load saved game</span>
+      </span>
+    </button>
+    <button class="menu-btn gold" onclick="goRank()">
+      <span class="mbtn-icon">&#127942;</span>
+      <span>
+        <b class="mbtn-title" id="btnRank">Ranking</b>
+        <span class="mbtn-sub" id="btnRankS">View top scores</span>
+      </span>
+    </button>
+    <button class="menu-btn secondary" onclick="showOv('ovLang')">
+      <span class="mbtn-icon">&#9881;&#65039;</span>
+      <span>
+        <b class="mbtn-title" id="btnOpt">Options</b>
+        <span class="mbtn-sub" id="btnOptS">Language &amp; settings</span>
+      </span>
+    </button>
+    <button class="menu-btn secondary" onclick="showOv('ovHow')">
+      <span class="mbtn-icon">&#10067;</span>
+      <span>
+        <b class="mbtn-title" id="btnHow">How to Play</b>
+        <span class="mbtn-sub" id="btnHowS">Rules &amp; controls</span>
+      </span>
+    </button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 2: 난이도 선택 ══ -->
+<div class="screen" id="screenDiff">
+  <div class="diff-header">
+    <h2 id="diffH">Difficulty</h2>
+    <p id="diffS">Choose your level</p>
+  </div>
+  <div class="diff-cards">
+    <div class="diff-card d-easy" onclick="pickDiff('easy')">
+      <div class="dc-icon">&#128522;</div>
+      <div class="dc-info">
+        <div class="dc-name" id="tEasy">Easy</div>
+        <div class="dc-desc" id="tEasyS">5 hints · No penalty · 38–40 given</div>
+      </div>
+      <div class="dc-tag" id="tEasyTag">EASY</div>
+    </div>
+    <div class="diff-card d-normal" onclick="pickDiff('normal')">
+      <div class="dc-icon">&#129488;</div>
+      <div class="dc-info">
+        <div class="dc-name" id="tNorm">Normal</div>
+        <div class="dc-desc" id="tNormS">3 hints · −100 penalty · 30–32 given</div>
+      </div>
+      <div class="dc-tag" id="tNormTag">NORMAL</div>
+    </div>
+    <div class="diff-card d-hard" onclick="pickDiff('hard')">
+      <div class="dc-icon">&#128128;</div>
+      <div class="dc-info">
+        <div class="dc-name" id="tHard">Hard</div>
+        <div class="dc-desc" id="tHardS">1 hint · −200 penalty · 22–25 given</div>
+      </div>
+      <div class="dc-tag" id="tHardTag">HARD</div>
+    </div>
+  </div>
+  <button class="back-btn" id="btnBack" onclick="goMenu()">← Back</button>
+</div>
+
+<!-- ══ SCREEN 3: 게임 ══ -->
+<div class="screen" id="screenGame">
+  <div class="hdr">
+    <div class="logo">SU<em>DO</em>KU</div>
+    <div class="hdr-right">
+      <button class="sm-btn" id="btnHome" onclick="goMenuFromGame()">Menu</button>
+      <div class="pip-row" id="pips"></div>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="sbox t"><div class="sv" id="vTime">00:00</div><div class="sl" id="lblTime">TIME</div></div>
+    <div class="sbox m"><div class="sv" id="vMiss">0/3</div><div class="sl" id="lblMiss">MISS</div></div>
+    <div class="sbox sc"><div class="sv" id="vScore">0</div><div class="sl" id="lblScore">SCORE</div></div>
+    <div class="sbox st"><div class="sv" id="vStreak">0</div><div class="sl" id="lblStreak">STREAK</div></div>
+  </div>
+  <div class="stage-row">
+    <div class="stage-name" id="stageName">Stage 1</div>
+    <div class="diff-tag" id="diffTag">EASY</div>
+  </div>
+  <div class="prog-wrap"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+  <div class="grid-wrap"><div class="grid" id="grid"></div></div>
+  <div class="numpad-wrap">
+    <div class="ctrl-row">
+      <div class="cbtn" id="btnNotes" onclick="toggleNotes()">
+        <div class="ci">&#9998;</div><div class="cl" id="lblNote">Notes</div>
+      </div>
+      <div class="cbtn" onclick="erase()">
+        <div class="ci">&#9003;</div><div class="cl" id="lblEr">Erase</div>
+      </div>
+      <div class="cbtn" onclick="undoMove()">
+        <div class="ci">&#8617;</div><div class="cl" id="lblUn">Undo</div>
+      </div>
+      <div class="cbtn" onclick="pauseGame()">
+        <div class="ci">&#9646;&#9646;</div><div class="cl" id="lblPa">Pause</div>
+      </div>
+    </div>
+    <div class="numpad" id="numpad"></div>
+  </div>
+  <button class="hint-btn" id="hintBtn" onclick="useHint()">
+    <span id="lblHint">Hint</span> (<span id="hintLeft">3</span><span id="lblHL"> left</span>) — <span id="lblHP">−200 pts</span>
+  </button>
+  <div class="save-row">
+    <button class="save-btn" onclick="saveGame()" id="lblSave">💾 Save</button>
+    <button class="load-btn" onclick="loadInPlay()" id="lblLoad">📂 Load</button>
+  </div>
+  <div class="save-ind" id="saveInd"></div>
+</div>
+
+<!-- ══ SCREEN 4: 랭킹 ══ -->
+<div class="screen" id="screenRank">
+  <div class="rank-hdr">
+    <h2 id="rankH">🏆 RANKING</h2>
+    <button class="sm-btn" onclick="goMenu()" id="rankBackBtn">← Back</button>
+  </div>
+  <div class="rank-filters" id="rankFilters"></div>
+  <table class="rank-tbl">
+    <thead><tr>
+      <th id="thR">#</th>
+      <th id="thP">Player</th>
+      <th id="thSc">Score</th>
+      <th id="thI">Info</th>
+      <th id="thD">Date</th>
+    </tr></thead>
+    <tbody id="rankBody"></tbody>
+  </table>
+  <button class="danger-btn" id="clrRankBtn" onclick="askClearRank()">🗑️ Clear Rankings</button>
+</div>
+
+<!-- ══ 오버레이들 ══ -->
+<div class="ov" id="ovLang">
+  <div class="ov-card" style="max-width:400px">
+    <div class="ov-ico">&#9881;&#65039;</div>
+    <div class="ov-title">LANGUAGE</div>
+    <div class="lang-scroll"><div class="lang-grid" id="langGrid"></div></div>
+    <button class="ov-btn" onclick="closeOvs()" id="tOk">OK</button>
+  </div>
+</div>
+
+<div class="ov" id="ovClear">
+  <div class="ov-card">
+    <div class="ov-ico">&#127881;</div>
+    <div class="ov-title" style="color:#1a7a3a" id="tCleared">CLEAR!</div>
+    <div class="ov-sub" id="clearMsg"></div>
+    <div class="ov-big" id="clearScore" style="color:#b8860b"></div>
+    <div class="ov-stars" id="clearStars"></div>
+    <button class="ov-btn" id="nextBtn" onclick="onNext()">Next</button>
+    <button class="ov-btn sec" onclick="restart()" id="tRetry">Retry</button>
+    <button class="ov-btn sec" onclick="goMenuFromGame()" id="tMenu">Menu</button>
+  </div>
+</div>
+
+<div class="ov" id="ovFail">
+  <div class="ov-card">
+    <div class="ov-ico">&#128128;</div>
+    <div class="ov-title" style="color:#cc2200" id="tFailT">GAME OVER</div>
+    <div class="ov-sub" id="tFailS">3 mistakes! Try again.</div>
+    <button class="ov-btn" onclick="restart()" id="tRetry2">Try Again</button>
+    <button class="ov-btn sec" onclick="goMenuFromGame()" id="tMenu2">Menu</button>
+  </div>
+</div>
+
+<div class="ov" id="ovAll">
+  <div class="ov-card">
+    <div class="ov-ico">&#127942;</div>
+    <div class="ov-title" style="color:#b8860b">ALL CLEAR!</div>
+    <div class="ov-sub" id="tAllS">All stages complete!<br>Amazing brain! 🧠</div>
+    <div class="ov-big" id="allScore" style="color:#b8860b"></div>
+    <div class="ov-stars" id="allStars"></div>
+    <button class="ov-btn" onclick="goMenuFromGame()" id="tMenu3">🏠 Menu</button>
+    <button class="ov-btn sec" onclick="startStage(0)" id="tRestartAll">🔁 Restart</button>
+  </div>
+</div>
+
+<div class="ov" id="ovPause">
+  <div class="ov-card">
+    <div class="ov-ico">&#9646;&#9646;</div>
+    <div class="ov-title" id="tPauseT">PAUSED</div>
+    <div class="ov-sub" id="tPauseS">Take a break!</div>
+    <button class="ov-btn" onclick="resumeGame()" id="tResume">▶ Resume</button>
+    <button class="ov-btn sec" onclick="saveAndResume()" id="tSaveRes">💾 Save &amp; Resume</button>
+    <button class="ov-btn sec" onclick="goMenuFromGame()" id="tMenu4">🏠 Menu</button>
+  </div>
+</div>
+
+<div class="ov" id="ovLoad">
+  <div class="ov-card">
+    <div class="ov-ico">&#128193;</div>
+    <div class="ov-title" id="tLoadT">Save Found</div>
+    <div class="ov-sub" id="loadMsg"></div>
+    <button class="ov-btn" onclick="confirmLoad()" id="tLoadOk">📂 Load</button>
+    <button class="ov-btn sec" onclick="closeOvs()" id="tCancel">Cancel</button>
+  </div>
+</div>
+
+<div class="ov" id="ovHow">
+  <div class="ov-card" style="max-width:380px">
+    <div class="ov-ico">&#10067;</div>
+    <div class="ov-title" id="tHowT">How to Play</div>
+    <div class="ov-sub" id="tHowB" style="text-align:left;line-height:1.9"></div>
+    <button class="ov-btn" onclick="closeOvs()" id="tGotIt">Got it!</button>
+  </div>
+</div>
+
+<div class="ov" id="ovName">
+  <div class="ov-card">
+    <div class="ov-ico">&#9998;</div>
+    <div class="ov-title" id="nameT">YOUR NAME</div>
+    <div class="ov-sub" id="nameS">Enter name for ranking</div>
+    <input type="text" id="playerNameInput" maxlength="12" placeholder="Player" autocomplete="off">
+    <button class="ov-btn" onclick="submitScore()" id="nameSave">Save Score</button>
+    <button class="ov-btn sec" onclick="skipScore()" id="nameSkip">Skip</button>
+  </div>
+</div>
+
+<div class="ov" id="ovClrRank">
+  <div class="ov-card">
+    <div class="ov-ico">&#128465;</div>
+    <div class="ov-title" id="clrrT">CLEAR?</div>
+    <div class="ov-sub" id="clrrS">All ranking data will be deleted.</div>
+    <button class="ov-btn danger" onclick="doClearRank()" id="clrrYes">Yes, Clear</button>
+    <button class="ov-btn sec" onclick="closeOvs()" id="clrrNo">Cancel</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="spop" id="spop"></div>
+<div class="streak-badge" id="streakBadge"></div>
+
+<!-- JS 로드 순서 중요 -->
+<script src="langs.js"></script>
+<script src="puzzles.js"></script>
+<script src="ranking.js"></script>
+<script src="game.js"></script>
+<script>
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>{
+    navigator.serviceWorker.register("./sw.js")
+      .then(()=>console.log("SW registered"))
+      .catch(e=>console.log("SW error",e));
+  });
+}
+</script>
+</body>
+</html>
