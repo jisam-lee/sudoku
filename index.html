@@ -5,11 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#ffffff">
 <title>SUDOKU</title>
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-192.svg">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -45,18 +43,9 @@
         <line x1="0" y1="54" x2="460" y2="54"/><line x1="0" y1="108" x2="460" y2="108"/>
       </g>
       <text x="20" y="42" font-family="Arial Black,sans-serif" font-size="22" fill="url(#gac)" opacity=".7">5</text>
-      <text x="65" y="42" font-family="Arial Black,sans-serif" font-size="22" fill="#fff" opacity=".2">3</text>
       <text x="390" y="96" font-family="Arial Black,sans-serif" font-size="22" fill="url(#ggd)" opacity=".6">9</text>
-      <text x="420" y="150" font-family="Arial Black,sans-serif" font-size="22" fill="url(#gac)" opacity=".45">2</text>
-      <text x="20" y="150" font-family="Arial Black,sans-serif" font-size="22" fill="#fff" opacity=".15">7</text>
-      <text x="230" y="92" font-family="Arial Black,sans-serif" font-size="62" fill="url(#gac)"
-            text-anchor="middle" letter-spacing="8" font-weight="900">SUDOKU</text>
-      <text x="230" y="118" font-family="Arial,sans-serif" font-size="11" fill="url(#ggd)"
-            text-anchor="middle" letter-spacing="5" font-weight="700">BRAIN TRAINING</text>
-      <text x="90" y="132" font-size="11" fill="#fbbf24" opacity=".65">&#9733;</text>
-      <text x="358" y="132" font-size="11" fill="#fbbf24" opacity=".65">&#9733;</text>
-      <text x="230" y="152" font-family="Arial,sans-serif" font-size="7" fill="#fff"
-            text-anchor="middle" opacity=".25" letter-spacing="2">TAP TO CHANGE IMAGE</text>
+      <text x="230" y="92" font-family="Arial Black,sans-serif" font-size="62" fill="url(#gac)" text-anchor="middle" letter-spacing="8" font-weight="900">SUDOKU</text>
+      <text x="230" y="118" font-family="Arial,sans-serif" font-size="11" fill="url(#ggd)" text-anchor="middle" letter-spacing="5" font-weight="700">BRAIN TRAINING</text>
     </svg>
     <img id="titleImgCustom" src="" alt="">
   </div>
@@ -64,14 +53,19 @@
 
   <div class="menu-logo">SU<em>DO</em>KU</div>
   <div class="menu-tagline" id="mTagline">Brain Training</div>
-  <div class="stage-dots" id="mDots"></div>
+
+  <!-- 진행 요약 -->
+  <div class="menu-progress" id="menuProgress">
+    <div class="mp-bar-wrap"><div class="mp-bar" id="mpBar" style="width:0%"></div></div>
+    <div class="mp-label" id="mpLabel">0 / 100 Cleared</div>
+  </div>
 
   <div class="menu-buttons">
-    <button class="menu-btn primary" onclick="goToDiff()">
+    <button class="menu-btn primary" onclick="goToStageSelect()">
       <span class="mbtn-icon">&#9654;</span>
       <span>
-        <b class="mbtn-title" id="btnNew">New Game</b>
-        <span class="mbtn-sub" id="btnNewS">Choose difficulty and start</span>
+        <b class="mbtn-title" id="btnNew">Stage Select</b>
+        <span class="mbtn-sub" id="btnNewS">100 stages available</span>
       </span>
     </button>
     <button class="menu-btn green" onclick="menuLoad()">
@@ -105,39 +99,29 @@
   </div>
 </div>
 
-<!-- ══ SCREEN 2: 난이도 선택 ══ -->
-<div class="screen" id="screenDiff">
-  <div class="diff-header">
-    <h2 id="diffH">Difficulty</h2>
-    <p id="diffS">Choose your level</p>
+<!-- ══ SCREEN 2: 스테이지 선택 ══ -->
+<div class="screen" id="screenStage">
+  <div class="stage-sel-hdr">
+    <button class="sm-btn" onclick="goMenu()">← Back</button>
+    <h2 class="stage-sel-title">STAGE SELECT</h2>
+    <div class="stage-sel-prog" id="stageSelProg">0/100</div>
   </div>
-  <div class="diff-cards">
-    <div class="diff-card d-easy" onclick="pickDiff('easy')">
-      <div class="dc-icon">&#128522;</div>
-      <div class="dc-info">
-        <div class="dc-name" id="tEasy">Easy</div>
-        <div class="dc-desc" id="tEasyS">5 hints · No penalty · 38–40 given</div>
-      </div>
-      <div class="dc-tag" id="tEasyTag">EASY</div>
+
+  <!-- 10개씩 그룹 탭 -->
+  <div class="group-tabs" id="groupTabs"></div>
+
+  <!-- 스테이지 그리드 -->
+  <div class="stage-grid" id="stageGrid"></div>
+
+  <!-- 선택한 스테이지 정보 -->
+  <div class="stage-info-card" id="stageInfoCard" style="display:none">
+    <div class="sic-top">
+      <span class="sic-num" id="sicNum">Stage 1</span>
+      <span class="sic-diff" id="sicDiff"></span>
     </div>
-    <div class="diff-card d-normal" onclick="pickDiff('normal')">
-      <div class="dc-icon">&#129488;</div>
-      <div class="dc-info">
-        <div class="dc-name" id="tNorm">Normal</div>
-        <div class="dc-desc" id="tNormS">3 hints · −100 penalty · 30–32 given</div>
-      </div>
-      <div class="dc-tag" id="tNormTag">NORMAL</div>
-    </div>
-    <div class="diff-card d-hard" onclick="pickDiff('hard')">
-      <div class="dc-icon">&#128128;</div>
-      <div class="dc-info">
-        <div class="dc-name" id="tHard">Hard</div>
-        <div class="dc-desc" id="tHardS">1 hint · −200 penalty · 22–25 given</div>
-      </div>
-      <div class="dc-tag" id="tHardTag">HARD</div>
-    </div>
+    <div class="sic-detail" id="sicDetail"></div>
+    <button class="sic-play" id="sicPlay" onclick="playSelectedStage()">▶ Play</button>
   </div>
-  <button class="back-btn" id="btnBack" onclick="goMenu()">← Back</button>
 </div>
 
 <!-- ══ SCREEN 3: 게임 ══ -->
@@ -146,7 +130,7 @@
     <div class="logo">SU<em>DO</em>KU</div>
     <div class="hdr-right">
       <button class="sm-btn" id="btnHome" onclick="goMenuFromGame()">Menu</button>
-      <div class="pip-row" id="pips"></div>
+      <div class="stage-badge" id="stageBadge">S1</div>
     </div>
   </div>
   <div class="stats">
@@ -157,7 +141,7 @@
   </div>
   <div class="stage-row">
     <div class="stage-name" id="stageName">Stage 1</div>
-    <div class="diff-tag" id="diffTag">EASY</div>
+    <div class="diff-tag" id="diffTag">●●○○○</div>
   </div>
   <div class="prog-wrap"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
   <div class="grid-wrap"><div class="grid" id="grid"></div></div>
@@ -197,11 +181,8 @@
   <div class="rank-filters" id="rankFilters"></div>
   <table class="rank-tbl">
     <thead><tr>
-      <th id="thR">#</th>
-      <th id="thP">Player</th>
-      <th id="thSc">Score</th>
-      <th id="thI">Info</th>
-      <th id="thD">Date</th>
+      <th id="thR">#</th><th id="thP">Player</th>
+      <th id="thSc">Score</th><th id="thI">Stage</th><th id="thD">Date</th>
     </tr></thead>
     <tbody id="rankBody"></tbody>
   </table>
@@ -225,7 +206,7 @@
     <div class="ov-sub" id="clearMsg"></div>
     <div class="ov-big" id="clearScore" style="color:#b8860b"></div>
     <div class="ov-stars" id="clearStars"></div>
-    <button class="ov-btn" id="nextBtn" onclick="onNext()">Next</button>
+    <button class="ov-btn" id="nextBtn" onclick="onNext()">Next Stage →</button>
     <button class="ov-btn sec" onclick="restart()" id="tRetry">Retry</button>
     <button class="ov-btn sec" onclick="goMenuFromGame()" id="tMenu">Menu</button>
   </div>
@@ -245,11 +226,10 @@
   <div class="ov-card">
     <div class="ov-ico">&#127942;</div>
     <div class="ov-title" style="color:#b8860b">ALL CLEAR!</div>
-    <div class="ov-sub" id="tAllS">All stages complete!<br>Amazing brain! 🧠</div>
+    <div class="ov-sub" id="tAllS">All 100 stages complete!<br>Amazing brain! 🧠</div>
     <div class="ov-big" id="allScore" style="color:#b8860b"></div>
     <div class="ov-stars" id="allStars"></div>
     <button class="ov-btn" onclick="goMenuFromGame()" id="tMenu3">🏠 Menu</button>
-    <button class="ov-btn sec" onclick="startStage(0)" id="tRestartAll">🔁 Restart</button>
   </div>
 </div>
 
@@ -308,7 +288,6 @@
 <div class="spop" id="spop"></div>
 <div class="streak-badge" id="streakBadge"></div>
 
-<!-- JS 로드 순서 중요 -->
 <script src="langs.js"></script>
 <script src="puzzles.js"></script>
 <script src="ranking.js"></script>
@@ -316,9 +295,7 @@
 <script>
 if("serviceWorker" in navigator){
   window.addEventListener("load",()=>{
-    navigator.serviceWorker.register("./sw.js")
-      .then(()=>console.log("SW registered"))
-      .catch(e=>console.log("SW error",e));
+    navigator.serviceWorker.register("./sw.js").catch(()=>{});
   });
 }
 </script>

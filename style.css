@@ -213,3 +213,86 @@ html, body {
 @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
 .cell.pop-anim   { animation:pop .25s ease; }
 .cell.shake-anim { animation:shake .35s ease; }
+
+/* ══ 메뉴 진행 바 ══ */
+.menu-progress { width:100%; max-width:420px; margin-bottom:14px; }
+.mp-bar-wrap { height:8px; background:#e8e8e8; border-radius:4px; overflow:hidden; margin-bottom:4px; }
+.mp-bar { height:100%; background:linear-gradient(90deg,var(--accent),var(--purple)); border-radius:4px; transition:width .5s ease; }
+.mp-label { font-size:11px; font-weight:900; color:#666; text-align:center; letter-spacing:1px; }
+
+/* ══ 스테이지 선택 화면 ══ */
+#screenStage { padding:10px 14px 24px; align-items:stretch; }
+.stage-sel-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; padding-bottom:8px; border-bottom:2px solid #222; }
+.stage-sel-title { font-family:'Arial Black',Arial,sans-serif; font-size:20px; font-weight:900; letter-spacing:3px; }
+.stage-sel-prog { font-family:'Arial Black',Arial,sans-serif; font-size:14px; color:var(--accent); font-weight:900; }
+
+/* 그룹 탭 (1-10, 11-20 ...) */
+.group-tabs { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:12px; }
+.gtab {
+  padding:6px 10px; border-radius:8px; border:2px solid #ccc;
+  background:#f5f5f5; cursor:pointer; font-size:11px; font-weight:900; color:#555;
+  transition:all .15s; min-width:46px; text-align:center;
+}
+.gtab:active { transform:scale(.95); }
+.gtab.on    { background:var(--accent); color:#fff; border-color:var(--accent); }
+.gtab.grp-done  { background:#e8fff0; color:var(--green); border-color:var(--green); }
+.gtab.grp-part  { background:#fff8e0; color:var(--gold); border-color:var(--gold); }
+.gtab.grp-lock  { background:#f5f5f5; color:#bbb; border-color:#ddd; }
+
+/* 스테이지 그리드 (5×2 = 10개) */
+.stage-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:7px; margin-bottom:12px; }
+.sg-cell {
+  aspect-ratio:1; border-radius:10px; border:2px solid #ddd;
+  background:#f8f8f8; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; cursor:pointer;
+  font-family:'Arial Black',Arial,sans-serif; font-size:13px; font-weight:900;
+  transition:all .15s; position:relative;
+}
+.sg-cell:active { transform:scale(.93); }
+/* 클리어됨 */
+.sg-cell.cleared {
+  background:#e8fff0; border-color:var(--green); color:var(--green);
+}
+.sg-cell.cleared::after {
+  content:'✓'; position:absolute; top:2px; right:5px;
+  font-size:10px; color:var(--green); font-family:sans-serif;
+}
+/* 현재 진행 가능 */
+.sg-cell.unlocked {
+  background:#fff; border-color:var(--accent); color:var(--accent);
+  box-shadow:0 2px 8px rgba(26,110,216,.2);
+}
+/* 잠김 */
+.sg-cell.locked {
+  background:#f0f0f0; border-color:#e0e0e0; color:#ccc; cursor:not-allowed;
+}
+/* 선택됨 */
+.sg-cell.selected {
+  transform:scale(1.08);
+  box-shadow:0 4px 14px rgba(26,110,216,.35);
+  border-width:3px;
+}
+.sg-num { font-size:15px; font-weight:900; line-height:1; }
+.sg-dot { font-size:7px; margin-top:2px; letter-spacing:1px; opacity:.7; }
+
+/* 스테이지 정보 카드 */
+.stage-info-card {
+  background:#f8f8f8; border:2px solid var(--accent); border-radius:12px;
+  padding:14px 16px; margin-top:4px;
+}
+.sic-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+.sic-num { font-family:'Arial Black',Arial,sans-serif; font-size:18px; font-weight:900; color:#111; }
+.sic-diff { font-size:11px; font-weight:900; padding:3px 10px; border-radius:20px; }
+.sic-detail { font-size:12px; color:#555; font-weight:700; margin-bottom:10px; line-height:1.6; }
+.sic-play {
+  width:100%; padding:12px; background:var(--accent); color:#fff;
+  border:none; border-radius:8px; cursor:pointer; font-family:inherit;
+  font-size:15px; font-weight:900; min-height:48px;
+}
+.sic-play:disabled { background:#ccc; cursor:not-allowed; }
+
+/* 게임 화면 스테이지 배지 */
+.stage-badge {
+  background:var(--accent); color:#fff; border-radius:6px;
+  padding:3px 8px; font-size:11px; font-weight:900; font-family:'Arial Black',Arial,sans-serif;
+}
