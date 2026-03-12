@@ -3,6 +3,7 @@
    ═══════════════════════════════════════════ */
 
 const SAVE_KEY      = 'sudoku_save_v5';
+let _setLangRendering = false;
 const PROGRESS_KEY  = 'sudoku_progress_v1'; // 클리어한 스테이지 저장
 
 // 힌트 개수: 스테이지에 따라 자동 계산
@@ -54,8 +55,10 @@ function goMenu() {
   showScreen('screenMenu');
 }
 function goToStageSelect() {
-  renderGroupTabs(1);
   showScreen('screenStage');
+  renderGroupTabs(_selGroup || 1);
+  // 현재 언어로 즉시 렌더
+  if(_selStage) selectStage(_selStage);
 }
 function goMenuFromGame() {
   clearInterval(S.timerID); closeOvs();
@@ -162,7 +165,6 @@ function selectStage(s) {
     sd.style.background  = diff.color + '20';
     sd.style.color       = diff.color;
     sd.style.border      = '1px solid ' + diff.color;
-    const diff2 = getDiffLabel(s);
     document.getElementById('sicDetail').innerHTML =
       `${pz.given} ${T('sic-given')} · ${81-pz.given} ${T('sic-blank')} · ${getHints(s)} ${T('sic-hints')}` +
       (isCleared ? '<br>✅ ' + T('sic-cleared') : '') +
@@ -177,6 +179,7 @@ function playSelectedStage() {
   if(!_selStage) return;
   startStage(_selStage);
   showScreen('screenGame');
+  window.scrollTo(0,0);
 }
 
 // ══ 스테이지 시작 ══
@@ -548,8 +551,9 @@ function setLang(lang){
   // 메뉴 진행바
   refreshMenuProgress();
   // 스테이지 선택 화면이 열려있으면 재렌더
-  if(document.getElementById('screenStage').classList.contains('active')) {
-    renderGroupTabs(_selGroup);
+  const stageScreen = document.getElementById('screenStage');
+  if(stageScreen && stageScreen.classList.contains('active')) {
+    renderGroupTabs(_selGroup || 1);
     if(_selStage) selectStage(_selStage);
   }
 }
@@ -612,4 +616,5 @@ document.addEventListener('keydown',e=>{
 
 // ══ 초기화 ══
 buildLangGrid();
+setLang(curLang);   // 모든 UI 텍스트 초기 세팅
 refreshMenuProgress();
