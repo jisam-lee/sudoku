@@ -399,15 +399,15 @@ function saveGame(){
 }
 function menuLoad(){
   const raw=localStorage.getItem(SAVE_KEY);
-  if(!raw){toast('No save data');return;}
+  if(!raw){toast('No save data found');return;}
   try{
     const d=JSON.parse(raw);
-    if(!d.version||!d.board){toast('Invalid save');return;}
+    if(!d.version||!d.board){toast('Invalid save file');return;}
     window._pendingLoad=d;
     const lm=document.getElementById('loadMsg');
-    if(lm) lm.innerHTML=`${d.savedAt}<br>Stage ${d.stage} · Score ${(d.score||0).toLocaleString()}`;
-    showScreen('screenGame'); showOv('ovLoad');
-  }catch(e){toast('❌ Load failed');}
+    if(lm) lm.innerHTML=`${d.savedAt||'?'}<br>Stage ${d.stage||1} · Score ${(d.score||0).toLocaleString()}`;
+    showOv('ovLoad');
+  }catch(e){toast('❌ Load failed: '+e.message);}
 }
 function loadInPlay(){
   const raw=localStorage.getItem(SAVE_KEY);
@@ -427,7 +427,7 @@ function confirmLoad(){
   S.stage=d.stage||1; S.board=d.board.map(r=>[...r]);
   S.fixed=d.fixed.map(r=>r.map(v=>v===1||v===true));
   S.sol=d.sol?d.sol.map(r=>[...r]):PUZZLES[d.stage-1].sol.map(r=>[...r]);
-  S.notes=d.notes.map(row=>row.map(cell=>new Set(cell)));
+  S.notes=d.notes?d.notes.map(row=>row.map(cell=>new Set(cell||[]))):Array.from({length:9},()=>Array.from({length:9},()=>new Set()));
   S.mistakes=d.mistakes||0; S.score=d.score||0;
   S.streak=d.streak||0; S.hints=d.hints!=null?d.hints:getHints(d.stage);
   S.timerSec=d.timerSec||0;
@@ -508,9 +508,45 @@ function buildLangGrid(){
     </button>`
   ).join('');
 }
+// 언어 전환 시 업데이트할 [elementId, translationKey] 쌍
+const LANG_IDS=[
+  ['mTagline','tagline'],
+  ['btnNew','btn-new'],['btnNewS','btn-new-s'],
+  ['btnCont','btn-cont'],['btnContS','btn-cont-s'],
+  ['btnRank','btn-rank'],['btnRankS','btn-rank-s'],
+  ['btnOpt','btn-opt'],['btnOptS','btn-opt-s'],
+  ['btnHow','btn-how'],['btnHowS','btn-how-s'],
+  ['btnHome','home'],
+  ['lblTime','lbl-t'],['lblMiss','lbl-m'],['lblScore','lbl-sc'],['lblStreak','lbl-sk'],
+  ['lblNote','lbl-note'],['lblEr','lbl-er'],['lblUn','lbl-un'],['lblPa','lbl-pa'],
+  ['lblHint','lbl-hint'],['lblHL','lbl-hl'],['lblHP','lbl-hp'],
+  ['lblSave','lbl-save'],['lblLoad','lbl-load'],
+  ['tCleared','cleared'],['tRetry','retry'],['tMenu','menu'],
+  ['tRetry2','retry2'],['tMenu2','menu2'],
+  ['tFailT','fail-t'],['tFailS','fail-s'],
+  ['tMenu3','menu3'],
+  ['tPauseT','pause-t'],['tResume','resume'],['tSaveRes','saveres'],['tMenu4','menu4'],
+  ['tLoadT','load-t'],['tLoadOk','load-ok'],['tCancel','cancel'],
+  ['tHowT','how-t'],['tGotIt','gotit'],['tOk','ok'],
+  ['rankH','rank-t'],['rankBackBtn','rank-back'],['clrRankBtn','clr-rank'],
+  ['thR','th-r'],['thP','th-p'],['thSc','th-sc'],['thI','th-i'],['thD','th-d'],
+  ['nameT','name-t'],['nameS','name-s'],['nameSave','namesave'],['nameSkip','nameskip'],
+  ['clrrT','clrr-t'],['clrrS','clrr-s'],['clrrYes','clrr-yes'],['clrrNo','clrr-no'],
+  ['nextBtn','next'],
+];
 function setLang(lang){
   curLang=lang; buildLangGrid();
+  LANG_IDS.forEach(([id,key])=>{
+    const el=document.getElementById(id); if(!el)return;
+    el.textContent=T(key);
+  });
+  // innerHTML 필요한 것들
   const howB=document.getElementById('tHowB'); if(howB) howB.innerHTML=T('how-b');
+  const allS=document.getElementById('tAllS'); if(allS) allS.innerHTML=T('all-s').replace('\n','<br>');
+  const pauseS=document.getElementById('tPauseS'); if(pauseS) pauseS.innerHTML=T('pause-s').replace('\n','<br>');
+  // 메뉴 진행바 텍스트
+  const mpLabel=document.getElementById('mpLabel');
+  if(mpLabel) mpLabel.textContent=clearedStages.size+' / 100 '+T('cleared-label');
 }
 
 // ══ 오버레이 ══
