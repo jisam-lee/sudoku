@@ -15,11 +15,11 @@ function getHints(stage) {
 }
 // 난이도 표시 (별 5개 기준)
 function getDiffLabel(stage) {
-  if (stage <= 20)  return { text:'●●○○○', color:'#1a7a3a', label:'Easy' };
-  if (stage <= 40)  return { text:'●●●○○', color:'#4a9a1a', label:'Normal' };
-  if (stage <= 60)  return { text:'●●●●○', color:'#b8860b', label:'Hard' };
-  if (stage <= 80)  return { text:'●●●●●', color:'#cc6600', label:'Expert' };
-  return              { text:'★★★★★', color:'#cc2200', label:'Master' };
+  if (stage <= 20)  return { text:'●○○○○', color:'#1a7a3a', key:'diff-easy' };
+  if (stage <= 40)  return { text:'●●○○○', color:'#4a9a1a', key:'diff-norm' };
+  if (stage <= 60)  return { text:'●●●○○', color:'#b8860b', key:'diff-hard' };
+  if (stage <= 80)  return { text:'●●●●○', color:'#cc6600', key:'diff-exp' };
+  return              { text:'●●●●●', color:'#cc2200', key:'diff-mas' };
 }
 
 // ── 진행 저장/불러오기 ──
@@ -70,7 +70,7 @@ function refreshMenuProgress() {
   const bar = document.getElementById('mpBar');
   const lbl = document.getElementById('mpLabel');
   if(bar) bar.style.width = pct + '%';
-  if(lbl) lbl.textContent = n + ' / 100 Cleared';
+  if(lbl) lbl.textContent = n + ' / 100 ' + T('cleared-label');
 }
 
 // ══ 스테이지 선택 UI ══
@@ -105,7 +105,7 @@ function renderGroupTabs(group) {
   renderStageGrid(group);
   // 진행 표시
   const sp = document.getElementById('stageSelProg');
-  if(sp) sp.textContent = clearedStages.size + '/100';
+  if(sp) sp.textContent = clearedStages.size + '/100 ' + T('cleared-label');
 }
 
 function renderStageGrid(group) {
@@ -156,18 +156,19 @@ function selectStage(s) {
   const isLocked = s > next;
   if(card) {
     card.style.display = 'block';
-    document.getElementById('sicNum').textContent  = 'Stage ' + s;
+    document.getElementById('sicNum').textContent  = T('stage') + ' ' + s;
     const sd = document.getElementById('sicDiff');
-    sd.textContent       = diff.label;
+    sd.textContent       = T(diff.key);
     sd.style.background  = diff.color + '20';
     sd.style.color       = diff.color;
     sd.style.border      = '1px solid ' + diff.color;
+    const diff2 = getDiffLabel(s);
     document.getElementById('sicDetail').innerHTML =
-      `${pz.given} given · ${81-pz.given} blank · ${getHints(s)} hints` +
-      (isCleared ? '<br>✅ Cleared!' : '') +
-      (isLocked  ? '<br>🔒 Clear previous stage first' : '');
+      `${pz.given} ${T('sic-given')} · ${81-pz.given} ${T('sic-blank')} · ${getHints(s)} ${T('sic-hints')}` +
+      (isCleared ? '<br>✅ ' + T('sic-cleared') : '') +
+      (isLocked  ? '<br>🔒 ' + T('sic-locked') : '');
     const play = document.getElementById('sicPlay');
-    play.textContent = isCleared ? '▶ Play Again' : '▶ Play';
+    play.textContent = isCleared ? '▶ ' + T('sic-replay') : '▶ ' + T('sic-play');
     play.disabled    = isLocked;
   }
 }
@@ -228,7 +229,7 @@ function renderStageInfo() {
   const sn   = document.getElementById('stageName');
   if(sn) sn.textContent = 'Stage ' + S.stage;
   const dt = document.getElementById('diffTag');
-  if(dt) { dt.textContent = diff.text; dt.style.color = diff.color; }
+  if(dt) { dt.textContent = diff.text + ' ' + T(diff.key); dt.style.color = diff.color; }
   const sb = document.getElementById('stageBadge');
   if(sb) sb.textContent = 'S' + S.stage;
 }
@@ -544,9 +545,13 @@ function setLang(lang){
   const howB=document.getElementById('tHowB'); if(howB) howB.innerHTML=T('how-b');
   const allS=document.getElementById('tAllS'); if(allS) allS.innerHTML=T('all-s').replace('\n','<br>');
   const pauseS=document.getElementById('tPauseS'); if(pauseS) pauseS.innerHTML=T('pause-s').replace('\n','<br>');
-  // 메뉴 진행바 텍스트
-  const mpLabel=document.getElementById('mpLabel');
-  if(mpLabel) mpLabel.textContent=clearedStages.size+' / 100 '+T('cleared-label');
+  // 메뉴 진행바
+  refreshMenuProgress();
+  // 스테이지 선택 화면이 열려있으면 재렌더
+  if(document.getElementById('screenStage').classList.contains('active')) {
+    renderGroupTabs(_selGroup);
+    if(_selStage) selectStage(_selStage);
+  }
 }
 
 // ══ 오버레이 ══

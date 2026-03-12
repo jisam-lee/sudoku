@@ -33,9 +33,10 @@ html, body {
 .menu-btn.green     { background:#f0fff4; color:#1a5a2a; border-color:var(--green); }
 .menu-btn.gold      { background:#fffbe8; color:#7a5800; border-color:var(--gold); }
 .menu-btn.secondary { background:#f5f5f5; color:#111; border-color:#ccc; }
-.mbtn-icon  { font-size:22px; flex-shrink:0; width:28px; text-align:center; }
-.mbtn-title { display:block; font-size:15px; font-weight:900; }
-.mbtn-sub   { display:block; font-size:11px; opacity:.65; margin-top:1px; }
+.mbtn-icon  { font-size:20px; flex-shrink:0; width:32px; text-align:center; line-height:1; align-self:center; }
+.mbtn-title { display:block; font-size:17px; font-weight:900; }
+.mbtn-sub   { display:block; font-size:13px; opacity:.65; margin-top:2px; }
+.menu-btn > span:last-child { display:flex; flex-direction:column; justify-content:center; text-align:left; }
 
 /* ══ DIFFICULTY ══ */
 #screenDiff { justify-content:flex-start; padding-top:24px; }
@@ -69,7 +70,7 @@ html, body {
 }
 
 .hdr { width:100%; max-width:520px; display:flex; align-items:center; justify-content:space-between; margin-bottom:5px; padding-bottom:5px; border-bottom:2px solid #222; }
-.logo { font-family:'Arial Black',Arial,sans-serif; font-size:22px; font-weight:900; letter-spacing:3px; }
+.logo { font-family:'Arial Black',Arial,sans-serif; font-size:24px; font-weight:900; letter-spacing:3px; }
 .logo em { color:var(--accent); font-style:normal; }
 .hdr-right { display:flex; align-items:center; gap:6px; }
 .sm-btn { padding:5px 10px; background:#f0f0f0; border:2px solid #ccc; border-radius:6px; cursor:pointer; color:#444; font-family:inherit; font-size:11px; font-weight:900; min-height:32px; }
@@ -81,16 +82,16 @@ html, body {
 /* 통계 — 작게 */
 .stats { width:100%; max-width:520px; display:grid; grid-template-columns:repeat(4,1fr); gap:4px; margin-bottom:4px; }
 .sbox { background:#f8f8f8; border:2px solid #ddd; border-radius:7px; padding:4px 2px; text-align:center; }
-.sv { font-family:'Arial Black',Arial,sans-serif; font-size:16px; font-weight:900; line-height:1; }
-.sl { font-size:8px; font-weight:900; letter-spacing:.4px; margin-top:1px; text-transform:uppercase; }
+.sv { font-family:'Arial Black',Arial,sans-serif; font-size:18px; font-weight:900; line-height:1; }
+.sl { font-size:10px; font-weight:900; letter-spacing:.4px; margin-top:1px; text-transform:uppercase; }
 .sbox.t  .sv,.sbox.t  .sl { color:var(--gold); }
 .sbox.m  .sv,.sbox.m  .sl { color:var(--red); }
 .sbox.sc .sv,.sbox.sc .sl { color:var(--green); }
 .sbox.st .sv,.sbox.st .sl { color:var(--purple); }
 
 .stage-row { width:100%; max-width:520px; display:flex; align-items:center; justify-content:space-between; margin-bottom:3px; }
-.stage-name { font-size:11px; font-weight:900; letter-spacing:.4px; }
-.diff-tag   { font-size:10px; font-weight:900; letter-spacing:1px; padding:2px 8px; border-radius:20px; }
+.stage-name { font-size:13px; font-weight:900; letter-spacing:.4px; }
+.diff-tag   { font-size:12px; font-weight:900; letter-spacing:1px; padding:2px 8px; border-radius:20px; }
 
 .prog-wrap { width:100%; max-width:520px; height:3px; background:#e0e0e0; border-radius:2px; margin-bottom:4px; overflow:hidden; }
 .prog-fill { height:100%; border-radius:2px; background:linear-gradient(90deg,var(--accent),var(--purple)); transition:width .4s ease; }
@@ -115,20 +116,20 @@ html, body {
 .cell.hi   { background:#e8f0ff; }
 .cell.err  { background:#ffe0e0 !important; }
 .cell.same { background:#e0ffe8; }
-.cn { font-size:clamp(11px,3.5vw,24px); font-weight:900; line-height:1; pointer-events:none; }
+.cn { font-size:clamp(14px,4.2vw,28px); font-weight:900; line-height:1; pointer-events:none; }
 .cell.fixed .cn { color:#111; }
 .cell.user  .cn { color:var(--accent); }
 .cell.err   .cn { color:var(--red); }
 .notes-grid { display:grid; grid-template-columns:repeat(3,1fr); width:100%; height:100%; padding:1px; pointer-events:none; }
-.note { font-size:clamp(3px,.9vw,7px); color:var(--purple); display:flex; align-items:center; justify-content:center; font-weight:900; }
+.note { font-size:clamp(5px,1.1vw,9px); color:var(--purple); display:flex; align-items:center; justify-content:center; font-weight:900; }
 
 /* 컨트롤 — 작게 */
 .numpad-wrap { width:100%; max-width:520px; margin-top:3px; }
 .ctrl-row { display:flex; gap:4px; margin-bottom:4px; }
 .cbtn { flex:1; padding:6px 2px; background:#f0f0f0; border:2px solid #ccc; border-radius:7px; cursor:pointer; text-align:center; min-height:42px; user-select:none; }
 .cbtn:active,.cbtn.active { background:#d0e4ff; border-color:var(--accent); }
-.ci { font-size:16px; line-height:1; }
-.cl { font-size:8px; color:#444; font-weight:900; margin-top:1px; }
+.ci { font-size:18px; line-height:1; }
+.cl { font-size:10px; color:#444; font-weight:900; margin-top:1px; }
 
 /* 숫자패드 */
 .numpad { display:grid; grid-template-columns:repeat(9,1fr); gap:3px; }
@@ -136,7 +137,7 @@ html, body {
   aspect-ratio:1;
   max-height:40px;   /* 높이 제한 — 스크롤 방지 핵심 */
   background:#f5f5f5; border:2px solid #ccc; border-radius:7px;
-  cursor:pointer; font-size:clamp(13px,3.8vw,22px); font-weight:900; color:#111;
+  cursor:pointer; font-size:clamp(16px,4.5vw,26px); font-weight:900; color:#111;
   font-family:'Arial Black',Arial,sans-serif;
   display:flex; align-items:center; justify-content:center; user-select:none;
 }
@@ -147,7 +148,7 @@ html, body {
 .hint-btn {
   width:100%; max-width:520px; margin-top:4px; padding:7px;
   background:#fffbe8; border:2px solid var(--gold); border-radius:7px;
-  cursor:pointer; color:#7a5800; font-family:inherit; font-size:12px; font-weight:900; min-height:36px;
+  cursor:pointer; color:#7a5800; font-family:inherit; font-size:13px; font-weight:900; min-height:36px;
 }
 .hint-btn:disabled { opacity:.3; pointer-events:none; }
 .save-row { width:100%; max-width:520px; display:flex; gap:5px; margin-top:4px; }
@@ -221,9 +222,9 @@ html, body {
 .mp-label { font-size:11px; font-weight:900; color:#666; text-align:center; letter-spacing:1px; }
 
 /* ══ 스테이지 선택 화면 ══ */
-#screenStage { padding:10px 14px 24px; align-items:stretch; }
+#screenStage { padding:10px 14px 24px; align-items:stretch; display:flex; flex-direction:column; min-height:100dvh; }
 .stage-sel-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; padding-bottom:8px; border-bottom:2px solid #222; }
-.stage-sel-title { font-family:'Arial Black',Arial,sans-serif; font-size:20px; font-weight:900; letter-spacing:3px; }
+.stage-sel-title { font-family:'Arial Black',Arial,sans-serif; font-size:22px; font-weight:900; letter-spacing:3px; }
 .stage-sel-prog { font-family:'Arial Black',Arial,sans-serif; font-size:14px; color:var(--accent); font-weight:900; }
 
 /* 그룹 탭 (1-10, 11-20 ...) */
@@ -240,13 +241,13 @@ html, body {
 .gtab.grp-lock  { background:#f5f5f5; color:#bbb; border-color:#ddd; }
 
 /* 스테이지 그리드 (5×2 = 10개) */
-.stage-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:7px; margin-bottom:12px; }
+.stage-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-bottom:12px; flex:1; align-content:start; }
 .sg-cell {
   aspect-ratio:1; border-radius:10px; border:2px solid #ddd;
   background:#f8f8f8; display:flex; flex-direction:column;
   align-items:center; justify-content:center; cursor:pointer;
   font-family:'Arial Black',Arial,sans-serif; font-size:13px; font-weight:900;
-  transition:all .15s; position:relative;
+  transition:all .15s; position:relative; min-height:52px;
 }
 .sg-cell:active { transform:scale(.93); }
 /* 클리어됨 */
@@ -272,8 +273,8 @@ html, body {
   box-shadow:0 4px 14px rgba(26,110,216,.35);
   border-width:3px;
 }
-.sg-num { font-size:15px; font-weight:900; line-height:1; }
-.sg-dot { font-size:7px; margin-top:2px; letter-spacing:1px; opacity:.7; }
+.sg-num { font-size:18px; font-weight:900; line-height:1; }
+.sg-dot { font-size:9px; margin-top:3px; letter-spacing:1px; opacity:.7; }
 
 /* 스테이지 정보 카드 */
 .stage-info-card {
@@ -281,9 +282,9 @@ html, body {
   padding:14px 16px; margin-top:4px;
 }
 .sic-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
-.sic-num { font-family:'Arial Black',Arial,sans-serif; font-size:18px; font-weight:900; color:#111; }
+.sic-num { font-family:'Arial Black',Arial,sans-serif; font-size:20px; font-weight:900; color:#111; }
 .sic-diff { font-size:11px; font-weight:900; padding:3px 10px; border-radius:20px; }
-.sic-detail { font-size:12px; color:#555; font-weight:700; margin-bottom:10px; line-height:1.6; }
+.sic-detail { font-size:13px; color:#555; font-weight:700; margin-bottom:10px; line-height:1.6; }
 .sic-play {
   width:100%; padding:12px; background:var(--accent); color:#fff;
   border:none; border-radius:8px; cursor:pointer; font-family:inherit;

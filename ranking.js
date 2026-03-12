@@ -44,17 +44,26 @@ function _refreshRankUI() {
 function _renderFilters() {
   const el = document.getElementById('rankFilters');
   if(!el) return;
-  el.innerHTML = ['all','easy','norm','hard'].map(f =>
+  el.innerHTML = ['all','s1','s2','s3','s4'].map(f =>
     `<button class="rf ${rankFilter===f?'on':''}" onclick="setRankFilter('${f}')">${T('rf-'+f)}</button>`
   ).join('');
 }
 function setRankFilter(f) { rankFilter = f; _renderFilters(); _renderTable(); }
 
+// 언어 코드 → 국기 이모지
+const LANG_FLAGS = {
+  en:'🇺🇸',ko:'🇰🇷',ja:'🇯🇵',zh:'🇨🇳',fr:'🇫🇷',de:'🇩🇪',
+  es:'🇪🇸',pt:'🇧🇷',hi:'🇮🇳',ar:'🇸🇦',ru:'🇷🇺',tr:'🇹🇷',
+};
+
 function _renderTable() {
   const tbody = document.getElementById('rankBody');
   if(!tbody) return;
   let data = loadRankings();
-  if (rankFilter !== 'all') data = data.filter(r => r.difficulty === rankFilter);
+  if (rankFilter === 's1') data = data.filter(r => (r.stage||1) <= 25);
+  else if (rankFilter === 's2') data = data.filter(r => (r.stage||1) >= 26 && (r.stage||1) <= 50);
+  else if (rankFilter === 's3') data = data.filter(r => (r.stage||1) >= 51 && (r.stage||1) <= 75);
+  else if (rankFilter === 's4') data = data.filter(r => (r.stage||1) >= 76);
   if (!data.length) {
     tbody.innerHTML = `<tr><td colspan="5" class="rank-empty">${T('rank-empty')}</td></tr>`;
     return;
@@ -62,14 +71,13 @@ function _renderTable() {
   tbody.innerHTML = data.slice(0,20).map((r,i) => {
     const pos = i+1;
     const cls = pos===1?'g': pos===2?'s': pos===3?'b': '';
-    const diff = r.difficulty || 'easy';
     const date = r.date ? new Date(r.date).toLocaleDateString() : '—';
+    const flag = LANG_FLAGS[r.lang||'en'] || '🌐';
     return `<tr>
       <td><span class="rpos ${cls}">${pos}</span></td>
-      <td style="font-weight:900">${r.name||'—'}</td>
+      <td style="font-weight:900">${flag} ${r.name||'—'}</td>
       <td><span class="rscore">${(r.score||0).toLocaleString()}</span></td>
-      <td><span class="rbadge ${diff}">${T('d-'+diff)}</span><br>
-          <span style="font-size:11px;color:#666">${T('stage')} ${r.stage||1}</span></td>
+      <td style="font-size:12px;font-weight:900;color:#555">${T('stage')} ${r.stage||1}</td>
       <td style="font-size:11px;color:#888">${date}</td>
     </tr>`;
   }).join('');
@@ -91,7 +99,7 @@ function promptRankName(scoreObj, afterFn) {
 function submitScore() {
   const inp = document.getElementById('playerNameInput');
   const name = (inp ? inp.value : '').trim() || 'Player';
-  if (pendingScore) addRanking({ ...pendingScore, name });
+  if (pendingScore) addRanking({ ...pendingScore, name, lang: curLang });
   pendingScore = null;
   closeOvs();
   const fn = window._afterRank; window._afterRank = null;
