@@ -646,15 +646,23 @@ document.addEventListener('keydown',e=>{
 
 // ══ [DEBUG] 정답 모두 채우기 — 테스트용, 배포 전 삭제 ══
 function debugFillAll() {
-  for(let r=0;r<9;r++) for(let c=0;c<9;c++) {
-    if(!S.fixed[r][c] && S.board[r][c]===0) {
-      S.board[r][c] = S.sol[r][c];
-      S.notes[r][c].clear();
-    }
+  // 빈칸 2개만 남기고 나머지 채우기
+  let empty = [];
+  for(let r=0;r<9;r++) for(let c=0;c<9;c++)
+    if(!S.fixed[r][c] && S.board[r][c]===0) empty.push({r,c});
+  // 랜덤으로 2개만 남기고 나머지 채움
+  const keep = new Set();
+  while(keep.size < Math.min(2, empty.length)) {
+    keep.add(Math.floor(Math.random()*empty.length));
   }
+  empty.forEach((cell,i) => {
+    if(!keep.has(i)) {
+      S.board[cell.r][cell.c] = S.sol[cell.r][cell.c];
+      S.notes[cell.r][cell.c].clear();
+    }
+  });
   refreshDoneNums();
   renderGrid(); renderNumpad(); refreshStats();
-  if(checkWin()) setTimeout(showClear, 300);
 }
 // ══ 초기화 ══
 buildLangGrid();
