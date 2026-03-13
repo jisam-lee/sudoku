@@ -643,6 +643,19 @@ document.addEventListener('keydown',e=>{
   e.preventDefault(); selectCell(r,c);
 });
 
+
+// ══ [DEBUG] 정답 모두 채우기 — 테스트용, 배포 전 삭제 ══
+function debugFillAll() {
+  for(let r=0;r<9;r++) for(let c=0;c<9;c++) {
+    if(!S.fixed[r][c] && S.board[r][c]===0) {
+      S.board[r][c] = S.sol[r][c];
+      S.notes[r][c].clear();
+    }
+  }
+  refreshDoneNums();
+  renderGrid(); renderNumpad(); refreshStats();
+  if(checkWin()) setTimeout(showClear, 300);
+}
 // ══ 초기화 ══
 buildLangGrid();
 setLang(curLang);   // 모든 UI 텍스트 초기 세팅

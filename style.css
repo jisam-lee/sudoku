@@ -74,6 +74,7 @@ html, body {
 .logo em { color:var(--accent); font-style:normal; }
 .hdr-right { display:flex; align-items:center; gap:6px; }
 .sm-btn { padding:5px 10px; background:#f0f0f0; border:2px solid #ccc; border-radius:6px; cursor:pointer; color:#444; font-family:inherit; font-size:11px; font-weight:900; min-height:32px; }
+.debug-btn { background:#fff0f0 !important; border-color:#ff4444 !important; color:#cc0000 !important; font-size:10px !important; }
 .pip-row { display:flex; gap:4px; align-items:center; }
 .pip { width:7px; height:7px; border-radius:50%; background:#ddd; border:2px solid #aaa; }
 .pip.done { background:var(--green); border-color:var(--green); }
