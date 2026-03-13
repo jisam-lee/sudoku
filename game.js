@@ -177,9 +177,10 @@ function selectStage(s) {
 
 function playSelectedStage() {
   if(!_selStage) return;
-  startStage(_selStage);
+  const stageNum = _selStage;
   showScreen('screenGame');
   window.scrollTo(0,0);
+  startStage(stageNum);
 }
 
 // ══ 스테이지 시작 ══
@@ -298,11 +299,39 @@ function refreshStats() {
 }
 
 function refreshDoneNums() {
+  const prev = new Set(S.doneNums);
   S.doneNums=new Set();
   for(let n=1;n<=9;n++){
     let cnt=0;
     for(let r=0;r<9;r++) for(let c=0;c<9;c++) if(S.board[r][c]===n) cnt++;
     if(cnt===9) S.doneNums.add(n);
+  }
+  // 새로 완성된 숫자가 있으면 애니메이션
+  for(const n of S.doneNums) {
+    if(!prev.has(n)) showNumComplete(n);
+  }
+}
+
+function showNumComplete(n) {
+  // 해당 숫자 모든 셀에 완성 애니메이션
+  document.querySelectorAll('.cell').forEach(cell => {
+    const r = parseInt(cell.dataset.r), c = parseInt(cell.dataset.c);
+    if(S.board[r][c] === n) {
+      cell.classList.add('num-complete');
+      setTimeout(() => cell.classList.remove('num-complete'), 800);
+    }
+  });
+  // 완성 배너
+  const el = document.getElementById('streakBadge');
+  if(el) {
+    el.textContent = n + ' × 9  ✓';
+    el.style.background = 'linear-gradient(135deg,#1a7a3a,#2ecc71)';
+    el.classList.add('show');
+    clearTimeout(window._numCompleteTid);
+    window._numCompleteTid = setTimeout(() => {
+      el.classList.remove('show');
+      el.style.background = '';
+    }, 1400);
   }
 }
 

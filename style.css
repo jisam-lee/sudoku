@@ -298,3 +298,14 @@ html, body {
   background:var(--accent); color:#fff; border-radius:6px;
   padding:3px 8px; font-size:11px; font-weight:900; font-family:'Arial Black',Arial,sans-serif;
 }
+
+/* 숫자 완성 애니메이션 */
+@keyframes numComplete {
+  0%   { transform:scale(1);   background:#fff; }
+  30%  { transform:scale(1.18); background:#b8ffcc; }
+  60%  { transform:scale(1.08); background:#e0ffe8; }
+  100% { transform:scale(1);   background:#fff; }
+}
+.cell.num-complete { animation:numComplete .8s ease; z-index:2; }
+.cell.fixed.num-complete .cn { color:#1a7a3a !important; }
+.cell.user.num-complete  .cn { color:#1a7a3a !important; }
